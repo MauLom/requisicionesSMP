@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "requisiciones-smp"
+  },
+  "targets": {
+    "requisiciones-smp": {
+      "hosting": {
+        "requisiciones-SMP": [
+          "requisiciones-smp"
+        ]
+      }
+    }
+  }
+}

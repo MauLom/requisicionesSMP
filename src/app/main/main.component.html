@@ -1,0 +1,144 @@
+<div class="loading allScreen" [hidden]="!load_show">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+<mat-drawer-container class="w-100 h-100">
+    <mat-drawer #drawer mode="side">
+        <div class="row">
+            <button mat-raised-button (click)="changeTab(0)">
+                Nueva Requisicion
+            </button>
+        </div>
+        <div class="row">
+            <button mat-raised-button (click)="changeTab(1)">
+                Requisiciones hechas
+            </button>
+        </div>
+
+
+    </mat-drawer>
+
+    <mat-toolbar class="bgC4Hex">
+        <button (click)="drawer.toggle()" mat-icon-button class="example-icon"
+            aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Requisiciones</span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+            <mat-icon><span class="material-icons-outlined">
+                    account_circle
+                </span></mat-icon>
+        </button>
+
+    </mat-toolbar>
+    <mat-tab-group [(selectedIndex)]="slctdTab">
+
+        <mat-tab label="First">
+            <div class="container h-100 w-100">
+                <p class="txtTitular">Por favor llena el formulario para generar tu requisicion</p>
+                <div class="col-12 mainCnt h-100 w-100">
+                    <form [formGroup]="nueva_requi_form" (ngSubmit)="onSubmit()">
+                        <div class="contForm ">
+
+                            <div class="row">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Selecciona el tipo de requisicion</mat-label>
+                                    <mat-select #mainSlctTipo [(ngModel)]="slctTipo"
+                                        [ngModelOptions]="{standalone: true}">
+                                        <mat-option *ngFor="let eaRequi of requis; let idx= index" [value]="idx">
+                                            {{eaRequi[1].nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 " *ngFor="let eaPregunta of requis[slctTipo][1].preguntas ">
+                                    <ng-container *ngIf="eaPregunta.tipo == 0 else testDate">
+                                        <mat-form-field apparabce="fill">
+                                            <mat-label>{{eaPregunta.txt}}</mat-label>
+                                            <mat-select #mainSlctTipo>
+                                                <mat-option *ngFor="let ea_opcion of eaPregunta.opciones " [value]="ea_opcion.name">
+                                                    {{ea_opcion.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </ng-container>
+                                    <ng-template #testDate>
+                                        <ng-container *ngIf="eaPregunta.tipo == 1 else testTxtArea">
+                                            <mat-form-field class="example-form-field" value="someResponse">
+                                                <mat-label>{{eaPregunta.txt}}</mat-label>
+                                                <input matInput [matDatepicker]="datepicker">
+                                                <mat-datepicker-toggle matSuffix [for]="datepicker">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #datepicker>
+                                                    <mat-datepicker-actions>
+                                                        <button mat-button matDatepickerCancel>Cancelar</button>
+                                                        <button mat-raised-button color="primary"
+                                                            matDatepickerApply>Guardar</button>
+                                                    </mat-datepicker-actions>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </ng-container>
+                                        <ng-template #testTxtArea>
+                                            <ng-container *ngIf="eaPregunta.tipo == 2 else testCheckbox">
+                                                <mat-form-field class="example-full-width">
+                                                    <mat-label>{{eaPregunta.txt}}</mat-label>
+                                                    <textarea matInput placeholder="Otros detalles"></textarea>
+                                                </mat-form-field>
+                                            </ng-container>
+                                            <ng-template #testCheckbox>
+                                                <ng-container *ngIf="eaPregunta.tipo == 3 else testInput">
+                                                    <label class="example-margin">&nbsp;</label>
+                                                    <mat-radio-group>
+
+                                                        <mat-radio-button class="example-margin" value="before">
+                                                            {{eaPregunta.txt}}
+                                                        </mat-radio-button>
+                                                    </mat-radio-group>
+                                                </ng-container>
+                                                <ng-template #testInput>
+                                                    <ng-container *ngIf="eaPregunta.tipo == 4 else notExist">
+                                                        <mat-form-field class="example-full-width">
+                                                            <mat-label>{{eaPregunta.txt}}</mat-label>
+                                                            <input matInput placeholder="Alguna Sugerencia">
+                                                        </mat-form-field>
+                                                    </ng-container>
+                                                    <ng-template #notExist>
+                                                        El tipo de pregunta no esta definido, contacta al soporte
+                                                    </ng-template>
+                                                </ng-template>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ng-template>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="contButtons">
+                            <button class="m-2" mat-stroked-button
+                                (click)="openSnackBar('No uses mayusculas', 'Lo he entendido')">
+                                Vaciar
+                            </button>
+                            <button mat-stroked-button type="submit">
+                                Continuar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Second"> Content 2 </mat-tab>
+        <mat-tab label="Third"> Content 3 </mat-tab>
+    </mat-tab-group>
+
+
+
+
+
+
+</mat-drawer-container>
